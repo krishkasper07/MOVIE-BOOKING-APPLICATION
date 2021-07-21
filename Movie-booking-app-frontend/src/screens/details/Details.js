@@ -52,7 +52,6 @@ class Details extends Component {
         let xhrMovie = new XMLHttpRequest();
         xhrMovie.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                debugger;
                 that.setState({
                     movie: JSON.parse(this.responseText)[0]
                 });

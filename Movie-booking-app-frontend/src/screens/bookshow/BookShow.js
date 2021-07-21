@@ -20,7 +20,7 @@ class BookShow extends Component {
             language: "",
             showDate: "",
             tickets: 0,
-            unitPrice: 500,
+            unitPrice: 0,
             availableTickets: 20,
             reqLocation: "dispNone",
             reqTheatre: "dispNone",
@@ -41,7 +41,6 @@ class BookShow extends Component {
         let xhrShows = new XMLHttpRequest();
         xhrShows.addEventListener("readystatechange", (function () {
             if (xhrShows.readyState === 4) {
-                debugger;
                 let response = JSON.parse(xhrShows.responseText)[0];
                 this.setState({ originalShows: response.shows });
                 let newLocations = [];
@@ -66,7 +65,6 @@ class BookShow extends Component {
     }
 
     locationChangeHandler = ((event) => {
-        debugger;
         this.setState({ location: event.target.value });
         let newTheatres = [];
 
@@ -134,7 +132,6 @@ class BookShow extends Component {
             if (show.theatre.city === this.state.location && show.theatre.name === this.state.theatre && show.language === this.state.language && show.show_timing === event.target.value) {
                 unitPrice = show.unit_price;
                 availableTickets = show.available_seats;
-                debugger;
                 this.setState({ showId: show.id });
             }
         }
@@ -153,14 +150,15 @@ class BookShow extends Component {
         this.state.showDate === "" ? this.setState({ reqShowDate: "dispBlock" }) : this.setState({ reqShowDate: "dispNone" });
         this.state.tickets === 0 ? this.setState({ reqTickets: "dispBlock" }) : this.setState({ reqTickets: "dispNone" });
 
-        if ((this.state.location === "") || (this.state.theatre === "") || (this.state.language === "") || (this.state.showDate === "") || (this.state.tickets === 0)) { return; }
-        debugger;
-        this.props.history.push({
-            pathname: '/confirm/' + this.props.match.params.id,
-            bookingSummary: this.state
-        })
+        if ((this.state.location !== "") && (this.state.theatre !== "") && (this.state.language !== "") 
+        && (this.state.showDate !== "") && (this.state.tickets !== "")) {
+            
+            this.props.history.push({
+                pathname: '/confirm/' + this.props.match.params.id,
+                bookingSummary: this.state
+            })
+        }
     }).bind(this);
-
     render() {
         return (
             <div>
@@ -257,7 +255,7 @@ class BookShow extends Component {
                             </Typography>
                             <br />
                             <Typography>
-                                Total Price: Rs. {this.state.unitPrice * this.state.tickets.length}
+                            Total Price: Rs. {((this.state.tickets>0)&&(this.state.tickets <= this.state.availableTickets)) ? (this.state.tickets * this.state.unitPrice) : "Not available"}
                             </Typography>
                             <br /><br />
                             <Button variant="contained" onClick={this.bookShowButtonHandler} color="primary">

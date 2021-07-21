@@ -43,9 +43,8 @@ class Confirmation extends Component {
 
   componentDidMount() {
     let currentState = this.state;
-    currentState.totalPrice = currentState.originalTotalPrice = parseInt(this.props.location.bookingSummary.unitPrice, 10) * parseInt(this.props.location.bookingSummary.tickets.length, 10);
+    currentState.totalPrice = currentState.originalTotalPrice = parseInt(this.props.location.bookingSummary.unitPrice, 10) * parseInt(this.props.location.bookingSummary.tickets, 10);
     this.setState({ state: currentState });
-    debugger;
   }
 
   confirmBookingHandler = () => {
@@ -66,7 +65,6 @@ class Confirmation extends Component {
 
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
-        debugger;
         that.setState({ bookingId: JSON.parse(this.responseText).reference_number });
       }
     });
@@ -77,7 +75,6 @@ class Confirmation extends Component {
     xhr.setRequestHeader("Content-Type", "application/json");
     
     console.log(data);
-    debugger;
     xhr.send(data);
 
     this.setState({ open: true });
